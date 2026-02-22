@@ -1,0 +1,46 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum League {
+  AL
+  NL
+}
+
+model Stadium {
+  id                          Int  @id @default(autoincrement())
+  name                    String
+  name_team          String
+  city                        String
+  description           String
+  state                     String
+  league                  League
+  capacity               Int
+  year_open            Int
+ longitude              Decimal
+  latitude                Decimal
+  image_url             String
+  left_field_ft           Int
+  center_field_ft     Int
+  right_field_ft        Int
+  total_games         Int
+  home_win_percentage Decimal
+  perfect_games       Int
+  created_at                DateTime @default(now())
+   updated_at               DateTime @updatedAt
+
+
+
+
+}

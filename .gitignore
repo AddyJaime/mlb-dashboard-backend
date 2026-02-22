@@ -32,3 +32,4 @@ logs/
 .cache/
 temp/
 tmp/
+/src/generated/prisma
