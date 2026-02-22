@@ -1,0 +1,33 @@
+# Node
+node_modules
+npm-debug.log
+
+# Build output
+build
+dist
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Git
+.git
+.gitignore
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+logs
+*.log
+
+# Docker (opcional pero recomendable)
+Dockerfile
+docker-compose.yml
+docker-compose.*.yml
+
+# IDE
+.vscode
+.idea
