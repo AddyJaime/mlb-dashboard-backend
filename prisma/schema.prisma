@@ -11,6 +11,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+
 }
 
 enum League {
@@ -28,19 +29,35 @@ model Stadium {
   league                  League
   capacity               Int
   year_open            Int
- longitude              Decimal
-  latitude                Decimal
+ longitude              Decimal @db.Decimal(9,6)
+  latitude                Decimal @db.Decimal(9,6)
   image_url             String
   left_field_ft           Int
   center_field_ft     Int
   right_field_ft        Int
   total_games         Int
-  home_win_percentage Decimal
+  home_win_percentage Decimal @db.Decimal(5,2)
   perfect_games       Int
   created_at                DateTime @default(now())
-   updated_at               DateTime @updatedAt
+  updated_at               DateTime @updatedAt
 
+attendances Attendance[]
+}
 
+model Attendance {
+id                  Int @id @default(autoincrement())
+stadium_id   Int
+year              Int
+total_attendance   Int
+perfect_games       Int
+created_at                DateTime @default(now())
+updated_at               DateTime @updatedAt
 
+stadium Stadium @relation(fields: [stadium_id], references: [id])
+
+// no puede tener dos registros del mismo estadio en el mismo ano
+// Yankee Stadium - 2024
+// Yankee Stadium - 2024 ❌
+@@unique([stadium_id, year])
 
 }

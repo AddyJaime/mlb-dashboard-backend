@@ -12,9 +12,9 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
-  api:
+  mlb_api:
     build: .
-    container_name: mlb_api
+    container_name: mlb_backend
     restart: always
     depends_on:
       - postgres
