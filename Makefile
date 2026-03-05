@@ -13,3 +13,6 @@ ps:
 restart:
 	docker compose down
 	docker compose up --build
+
+clean:
+	docker system prune -a
