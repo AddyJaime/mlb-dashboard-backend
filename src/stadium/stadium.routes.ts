@@ -1,8 +1,9 @@
 import { Router } from "express";
-import { getAllStadiums } from "./stadium.controller";
+import { getAllStadiums, getStadiumById } from "./stadium.controller";
 
 const router = Router();
 
 router.get("/", getAllStadiums);
+router.get("/:id", getStadiumById)
 
 export default router;
