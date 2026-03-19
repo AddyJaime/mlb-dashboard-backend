@@ -15,7 +15,7 @@ console.log("Req Query:", req.query)
 
 // aqui el controller recibe los datos que manda el cliente
 // desde Postman, navegador o frontend
-  let {league, state} = req.query;
+  let {league, state, capacity} = req.query;
 
   let filters: StadiumFilters = {}
 // objeto vacío donde se guardarán los filtros para la base de datos
@@ -30,11 +30,14 @@ console.log("Req Query:", req.query)
   if(state){
     filters.state = (state as string).toUpperCase();
   }
-// si el cliente envía state, se agrega al objeto filters
 
-  console.log("Filters", filters)
-// DEBUG: muestra cómo quedó el objeto filters
-// ejemplo: { state: "ny" }
+
+if(capacity){
+  // req.query siempre viene como un string por esa razon hay que cambiar capacity a un numero
+    filters.capacity = (capacity as string).toUpperCase();
+}
+
+
 
   // aqui el controller llama al service
   // el service es quien consulta la base de datos

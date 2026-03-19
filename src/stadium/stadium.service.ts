@@ -25,6 +25,23 @@ export const findAllStadiums = async (filters: StadiumFilters) => {
 // si existe state en filters se agrega al objeto where
 // ejemplo final: { league: "AL", state: "NY" }
 
+if(filters.capacity){
+if(filters.capacity === "UNDER_40K"){
+  "LT: less than"
+  where.capacity = {lt: 40000};
+}
+
+if(filters.capacity === "BETWEEN_40K_45K"){
+  "GTE: greater than or equal, LTE: less than or equal"
+where.capacity = {gte: 40000, lte:45000}
+}
+
+  "GT: greater than"
+if(filters.capacity ===  "OVER_45K"){
+where.capacity = {gt: 45000}
+}
+}
+
   console.log("Where query", where)
 // DEBUG: muestra cómo quedó la query que se enviará a la base de datos
 
