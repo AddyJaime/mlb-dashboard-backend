@@ -9,6 +9,7 @@ app.use(express.json());
 // connect routes
 app.use("/api/stadiums", stadiumRoutes);
 
+
 // ordenar json
 app.set("json spaces", 2)
 

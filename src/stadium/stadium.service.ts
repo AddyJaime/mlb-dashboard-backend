@@ -89,3 +89,23 @@ export const findStadiumsByIds = async (idsArray:number[])=> {
   }
  })
 }
+
+export const findStadiumAttendance = async (stadium_id: number)=> {
+  console.log(stadium_id)
+  // ve a la tabla attenance
+return await prisma.attendance.findMany({
+  // pero solo donde
+  where: {
+    // 👉 izquierda = campo en la base de datos
+// 👉 derecha = variable que tú tienes
+    stadium_id: stadium_id
+  },
+  orderBy: {
+    year: "asc"
+  },
+  select: {
+    year: true,
+    total_attendance: true
+  }
+})
+}

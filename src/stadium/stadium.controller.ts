@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { findAllStadiums, findStadiumById, findStadiumsByIds } from "./stadium.service";
+import { findAllStadiums, findStadiumById, findStadiumsByIds, findStadiumAttendance } from "./stadium.service";
 import { League } from "@prisma/client";
 import { StadiumFilters } from "../types/stadium.types";
 
@@ -132,4 +132,33 @@ export const getStadiumsToCompare = async (req: Request, res: Response) => {
       message: "internal Server error"
     })
   }
+}
+
+export const getStadiumAttendance = async (req:Request, res:Response)=> {
+
+  try {
+    let stadium_id = Number(req.params.id)
+  //  validar que ids venga
+    if (isNaN(stadium_id)) {
+    return  res.status(400).json({
+        success: false,
+        message: "Id is not a number"
+      })
+    }
+  
+    const stadiumAttendance = await findStadiumAttendance(stadium_id);
+
+    res.status(200).json({
+      success: true,
+      data: stadiumAttendance
+    })
+    
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      message: "internal error occur"
+    })
+  }
+
+
 }

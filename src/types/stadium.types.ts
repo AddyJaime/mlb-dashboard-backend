@@ -5,4 +5,5 @@ export type StadiumFilters = {
   state? : string,
   capacity?: string,
   name_team?: string
+
 }
