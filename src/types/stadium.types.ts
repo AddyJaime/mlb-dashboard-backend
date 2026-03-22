@@ -3,5 +3,6 @@ import { League } from "@prisma/client"
 export type StadiumFilters = {
   league?: League,
   state? : string,
-  capacity?: string
+  capacity?: string,
+  name_team?: string
 }

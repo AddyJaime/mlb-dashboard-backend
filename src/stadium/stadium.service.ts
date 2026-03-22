@@ -42,6 +42,12 @@ where.capacity = {gt: 45000}
 }
 }
 
+// busca las primeras palabras del equipo escrito 
+where.name_team = {
+  contains: filters.name_team,
+  mode: "insensitive"
+}
+
   console.log("Where query", where)
 // DEBUG: muestra cómo quedó la query que se enviará a la base de datos
 
@@ -60,6 +66,7 @@ where.capacity = {gt: 45000}
 export const findStadiumById = async (id: number) => {
 
   return await prisma.stadium.findUnique({
+    // dame el estadio donde el id sea exactamente igual a este valor 
     where: {
       id: id
     }
@@ -70,3 +77,15 @@ export const findStadiumById = async (id: number) => {
 // Prisma genera algo como:
 // SELECT * FROM Stadium WHERE id = 5
 // devuelve un solo resultado o null si no existe
+
+export const findStadiumsByIds = async (idsArray:number[])=> {
+  console.log(idsArray)
+ return await prisma.stadium.findMany({
+  // dame todos los stadiums donde el id esté dentro de la lista idsArray
+  where: {
+    id:{
+      in: idsArray,
+    }
+  }
+ })
+}
