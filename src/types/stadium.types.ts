@@ -7,3 +7,7 @@ export type StadiumFilters = {
   name_team?: string
 
 }
+
+export type AttendanceFilters = {
+  year?: number | {gte?: number; lte?:number}
+}

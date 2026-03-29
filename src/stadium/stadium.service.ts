@@ -1,6 +1,6 @@
 import { League, Prisma } from "@prisma/client";
 import { prisma } from "../config/prisma";
-import { StadiumFilters } from "../types/stadium.types";
+import { AttendanceFilters, StadiumFilters } from "../types/stadium.types";
 
 // CONSULTAS A LA BASE DE DATOS
 export const findAllStadiums = async (filters: StadiumFilters) => {
@@ -90,22 +90,34 @@ export const findStadiumsByIds = async (idsArray:number[])=> {
  })
 }
 
-export const findStadiumAttendance = async (stadium_id: number)=> {
+export const findStadiumAttendance = async (stadium_id: number, filters:AttendanceFilters)=> {
   console.log(stadium_id)
   // ve a la tabla attenance
 return await prisma.attendance.findMany({
   // pero solo donde
   where: {
-    // 👉 izquierda = campo en la base de datos
-// 👉 derecha = variable que tú tienes
-    stadium_id: stadium_id
+    // izquierda = campo en la base de datos
+   // derecha = variable que tú tienes
+  //  prisma ignora lo que no le pases si no viene simplemente lo ignora 
+  
+    stadium_id: stadium_id,
+    year: filters.year
+
   },
   orderBy: {
     year: "asc"
   },
+  // en sql esto es JOIN STADIUM ON ATTENANDCE.STADIUM_ID = STADIUM.ID
   select: {
-    year: true,
-    total_attendance: true
+  year: true,
+  total_attendance: true,
+  stadium: {
+    select: {
+      name_team: true
+    }
+  }
   }
 })
 }
+// SELECT: ELIGE CAMPOS ESPECIFICOS 
+// INCLUDE: TRAE RELACIONES COMPLETAS

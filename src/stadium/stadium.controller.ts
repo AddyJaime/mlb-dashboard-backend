@@ -1,7 +1,10 @@
 import { Request, Response } from "express";
 import { findAllStadiums, findStadiumById, findStadiumsByIds, findStadiumAttendance } from "./stadium.service";
 import { League } from "@prisma/client";
-import { StadiumFilters } from "../types/stadium.types";
+import { AttendanceFilters, StadiumFilters } from "../types/stadium.types";
+
+// utils helper
+import parseNumberQuery from "../utils/parseQuery";
 
 
 
@@ -100,7 +103,7 @@ export const getStadiumsToCompare = async (req: Request, res: Response) => {
         message: "Ids query param is required "
       })
     }
-    // 3: convertir string ya que el cliente siempre manda stringa array de numeros 
+    // 3: convertir string ya que el cliente siempre manda string a array de numeros 
     const idsArray = (ids as string).split(",").map(id => Number(id))
 
     // 4 : validar que no haya un no a number NAn
@@ -134,31 +137,83 @@ export const getStadiumsToCompare = async (req: Request, res: Response) => {
   }
 }
 
-export const getStadiumAttendance = async (req:Request, res:Response)=> {
-
+export const getStadiumAttendance = async (req: Request, res: Response) => {
   try {
-    let stadium_id = Number(req.params.id)
-  //  validar que ids venga
-    if (isNaN(stadium_id)) {
-    return  res.status(400).json({
+    // ==============================
+    // Params
+    // ==============================
+    let stadium_id = req.params.id
+    let stadium_id_converted = Number(stadium_id)
+
+    // ==============================
+    // Query Params
+    // ==============================
+    // req.query = {
+    //   year: "2023",
+    //   from: "2020",
+    //   to: "2024"
+    // }
+    let { year, from, to } = req.query
+
+    const parsedYear = parseNumberQuery(year, "year")
+    const parsedFrom = parseNumberQuery(from, "from")
+    const parsedTo = parseNumberQuery(to, "to")
+
+    let filters: AttendanceFilters = {}
+
+    // ==============================
+    // Validaciones
+    // ==============================
+    if (isNaN(stadium_id_converted)) {
+      return res.status(400).json({
         success: false,
         message: "Id is not a number"
       })
     }
-  
-    const stadiumAttendance = await findStadiumAttendance(stadium_id);
 
+    // ==============================
+    // Lógica de filtros
+    // ==============================
+    if (parsedYear !== undefined) {
+      filters.year = parsedYear
+    } 
+    // aqui deberia ser asi y no asi parsedFrom && parsedTo !== undefined)
+    // ya que se evaluaria asi parsedFrom && (parsedTo !== undefined)
+    else if (parsedFrom !== undefined && parsedTo !== undefined) {
+      filters.year = {
+        // greater than or equal
+        gte: parsedFrom,
+        // less than or equal
+        lte: parsedTo
+      }
+    } 
+    else if (parsedFrom !== undefined || parsedTo !== undefined) {
+      return res.status(400).json({
+        success: false,
+        message: "Both 'From' and 'To' are required for range"
+      })
+    }
+
+    // ==============================
+    // Service Call
+    // ==============================
+    const stadiumAttendance = await findStadiumAttendance(
+      stadium_id_converted,
+      filters
+    )
+
+    // ==============================
+    // Response
+    // ==============================
     res.status(200).json({
       success: true,
       data: stadiumAttendance
     })
-    
+
   } catch (error) {
     res.status(500).json({
       success: false,
       message: "internal error occur"
     })
   }
-
-
 }
