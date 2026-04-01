@@ -53,7 +53,8 @@ where.name_team = {
 
 // aqui el service consulta la base de datos usando Prisma
   const stadiums = await prisma.stadium.findMany({
-    where
+    where,
+    take: 10,
   })
 // Prisma convierte esto automáticamente en SQL
 // ejemplo:

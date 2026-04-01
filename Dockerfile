@@ -45,6 +45,8 @@ COPY --from=builder /app/build ./build
 # copiar prisma engines
 COPY --from=builder /app/node_modules/.prisma ./node_modules/.prisma
 
+COPY  images ./images
+
 RUN addgroup -S appgroup && adduser -S appuser -G appgroup
 USER appuser
 
