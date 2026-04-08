@@ -9,6 +9,8 @@ app.use(express.json());
 
 // connect routes
 app.use("/api/stadiums", stadiumRoutes);
+
+// this means everthing that is in this folder is public in the nav
 app.use('/images', express.static(path.join(__dirname, "../images")))
 
 
